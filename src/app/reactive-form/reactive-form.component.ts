@@ -10,6 +10,5 @@ export class ReactiveFormComponent {
   formdat: formData;
   constructor() {
     this.formdat = JSON.parse(localStorage.getItem('formdat'));
-    console.log(this.formdat);
   }
 }

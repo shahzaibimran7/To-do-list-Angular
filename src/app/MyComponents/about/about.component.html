@@ -1,137 +1,97 @@
-<form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
-  <div class="form">
-    <div class="form-group"></div>
-    <label for="firstname">First Name: </label> <br />
+<form
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  class="needs-validation"
+  novalidate
+>
+  <div class="mb-3">
+    <label for="firstName" class="form-label">First name</label>
     <input
       type="text"
+      class="form-control"
       id="firstName"
-      name="firstName"
-      class="form-control"
       formControlName="firstName"
+      required
     />
-    <div
-      *ngIf="
-        !reactiveForm.get('firstName').valid &&
-        (reactiveForm.get('firstName').dirty ||
-          reactiveForm.get('firstName').touched)
-      "
-    >
-      <div
-        [hidden]="!reactiveForm.get('firstName').errors['required']"
-        style="color: red"
-      >
-        firstName is required
-      </div>
-    </div>
-
-    <br />
-    <label for="lastname">Last Name: </label>
+    <div class="invalid-feedback">Please provide a valid first name.</div>
+  </div>
+  <div class="mb-3">
+    <label for="lastName" class="form-label">Last name</label>
     <input
       type="text"
-      id="lastName"
-      name="lastName"
       class="form-control"
+      id="lastName"
       formControlName="lastName"
+      required
     />
-    <div
-      *ngIf="
-        !reactiveForm.get('lastName').valid &&
-        (reactiveForm.get('lastName').dirty ||
-          reactiveForm.get('lastName').touched)
-      "
-    >
-      <div
-        [hidden]="!reactiveForm.get('lastName').errors['required']"
-        style="color: red"
-      >
-        lastName is required
-      </div>
-    </div>
-    <br />
-    <label for="email">Email: </label>
+    <div class="invalid-feedback">Please provide a valid last name.</div>
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label">Email</label>
     <input
       type="email"
-      id="email"
-      name="email"
       class="form-control"
+      id="email"
       formControlName="email"
+      required
     />
-    <div
-      *ngIf="
-        !reactiveForm.get('email').valid &&
-        (reactiveForm.get('email').dirty || reactiveForm.get('email').touched)
-      "
-    >
-      <div
-        [hidden]="!reactiveForm.get('email').errors['required']"
-        style="color: red"
-      >
-        Email is required
-      </div>
-    </div>
-    <br />
-    <br />Enter your Address:<br />
-    <textarea class="form-control" formControlName="address"></textarea><br />
-    <div
-      *ngIf="
-        !reactiveForm.get('address').valid &&
-        (reactiveForm.get('address').dirty ||
-          reactiveForm.get('address').touched)
-      "
-    >
-      <div
-        [hidden]="!reactiveForm.get('address').errors['required']"
-        style="color: red"
-      >
-        address is required
-      </div>
-    </div>
-    <label for="phoneNo">Add Phone Number: </label>
-    <br />
-    <br />
-    <div formArrayName="phoneNum">
-      <ng-container
-        *ngFor="
-          let pNum of reactiveForm.get('phoneNum')['controls'];
-          index as i
-        "
-      >
-        <br />
-        <tr>
-          <td class="form-control">
-            <label for="register_network" class="label">Select Network:</label>
-          </td>
-          <td>
-            <select name="Network" id="register_network" class="form-control">
-              <option value="Ufone">Ufone</option>
-              <option value="Telenor">Telenor</option>
-              <option value="Jazz">Jazz</option>
-              <option value="Zong">Zong</option>
-              <option value="SCOM">SCOM</option>
-            </select>
-          </td>
-        </tr>
-        <input
-          type="number"
-          id="phoneNo"
-          placeholder="phoneNumber"
-          class="form-control"
-          formControlName="{{ i }}"
-        />
-      </ng-container>
-    </div>
-    <br />
-    <tr>
-      <td colspan="2">
-        <div class="form-group">
-          <input
-            type="submit"
-            id="button"
-            value="button"
-            class="form-control"
-          />
-        </div>
-      </td>
-    </tr>
+    <div class="invalid-feedback">Please provide a valid email.</div>
   </div>
+  <div class="mb-3">
+    <label for="address" class="form-label">Address</label>
+    <input
+      type="text"
+      class="form-control"
+      id="address"
+      formControlName="address"
+      required
+    />
+    <div class="invalid-feedback">Please provide a valid address.</div>
+  </div>
+  <div class="mb-3" formArrayName="phoneNums">
+    <div
+      *ngFor="let phoneNum of form.get('phoneNums')['controls']; let i = index"
+      [formGroupName]="i"
+    >
+      <div class="row">
+        <div class="col-md-6">
+          <label for="phoneNum" class="form-label"
+            >Phone number {{ i + 1 }}</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="phoneNum"
+            formControlName="number"
+            required
+          />
+          <div class="invalid-feedback">
+            Please provide a valid phone number.
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label for="phoneLabel" class="form-label">Phone label</label>
+          <select class="form-select" id="phoneLabel" formControlName="label">
+            <option value="" selected disabled>Select a label</option>
+            <option *ngFor="let label of phoneLabels" [value]="label">
+              {{ label }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button
+            type="button"
+            class="btn btn-danger mt-4"
+            (click)="removePhoneNum(i)"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary mt-4" (click)="addPhoneNum()">
+      <i class="bi bi-plus"></i> Add phone number
+    </button>
+  </div>
+  <button type="submit" class="btn btn-primary mt-4">Submit</button>
 </form>
